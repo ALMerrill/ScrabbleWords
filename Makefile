@@ -1,4 +1,5 @@
-NAME   := acmecorp/foo
+DOCKER_USER	:= amerrill
+NAME   := ${DOCKER_USER}/scrabble-words
 TAG    := $$(git log -1 --pretty=%!H(MISSING))
 IMG    := ${NAME}:${TAG}
 LATEST := ${NAME}:latest
@@ -9,6 +10,3 @@ build:
  
 push:
   @docker push ${NAME}
- 
-login:
-  @docker log -u ${DOCKER_USER} -p ${DOCKER_PASS}
