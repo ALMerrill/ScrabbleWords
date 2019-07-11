@@ -11,6 +11,6 @@ build:
 
 run:
 	@docker run -p ${LOCAL_PORT}\:${DOCKER_PORT} ${IMG}
- 
+
 push:
 	@docker push ${NAME}
