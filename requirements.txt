@@ -1,1 +1,4 @@
 Flask
+fasttext
+autopep8
+python-dotenv
