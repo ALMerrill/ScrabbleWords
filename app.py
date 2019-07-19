@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import os
 import socket
 import fasttext
@@ -12,9 +12,12 @@ def root():
     return '<h3>Flask is up and running<h3>'
 
 
-@app.route('/NN')
-def tenNN():
+@app.route('/api/nearest-neighbor')
+def nearest_neighbor():
     # TODO: move this logic to an util file
+    word = request.args.get('word', default='', type=str)
+    if word == '':
+        return 'No word was given'
     model = fasttext.load_model('models/fil9-sg.bin')
     vectors = []
 
@@ -26,7 +29,7 @@ def tenNN():
             vector = [float(i) for i in line.split()[1:]]
             vectors.append(vector)
 
-    word_vec = model['asparagus']
+    word_vec = model[word]
     ban_set = []
     index = fasttext.util.find_nearest_neighbor(
         word_vec, vectors, ban_set)
