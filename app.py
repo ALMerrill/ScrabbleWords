@@ -1,28 +1,11 @@
 from flask import Flask, request, jsonify
 import os
 import socket
-import fasttext
-import fasttext.util
-import gensim
+from util import util
 
 app = Flask(__name__)
 
-print('Starting server')
-# word2vec = gensim.models.KeyedVectors.load_word2vec_format('models/fil9.vec')
-
-model = fasttext.load_model('models/fil9.bin')
-vectors = []
-
-with open('models/fil9.vec') as vec_file:
-    next(vec_file)
-    j = 0
-    for line in vec_file:
-        if "'" in line:
-            print(line)
-        j += 1
-        vector = [float(i) for i in line.strip().split(" ")[1:]]
-        vectors.append(vector)
-print('done loading')
+model, vectors = util.load_model('fil9.bin')
 
 
 @app.route('/')
@@ -38,18 +21,7 @@ def nearest_neighbor():
         return 'No word was given'
     N = request.args.get('N', default=1, type=int)
 
-    # This is the gensim way to do it, but as far as I can tell, it only accepts words in the vocabulary
-    # results = word2vec.most_similar(positive=[word], topn=N)
-    # return jsonify([word[0] for word in results])
-
-    word_vec = model[word]
-    ban_set = []
-    results = []
-    for i in range(N):
-        nearest_vec_index = fasttext.util.find_nearest_neighbor(
-            word_vec, vectors, ban_set)
-        results.append(model.words[nearest_vec_index])
-        ban_set.append(nearest_vec_index)
+    results = util.nearest_neighbor(model, word, vectors, N)
     return jsonify(results)
 
 
