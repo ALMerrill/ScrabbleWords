@@ -5,7 +5,7 @@ from util import util
 
 app = Flask(__name__)
 
-model, vectors = util.load_model('fil9.bin')
+model, vectors = util.load_model('fil9.vec')
 
 
 @app.route('/')
@@ -15,7 +15,6 @@ def root():
 
 @app.route('/api/nearest-neighbor')
 def nearest_neighbor():
-    # TODO: move this logic to an util file
     word = request.args.get('word', default='', type=str)
     if word == '':
         return 'No word was given'
