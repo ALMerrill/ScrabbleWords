@@ -2,9 +2,12 @@ import fasttext
 import fasttext.util
 import gensim
 import enchant
+import nltk
+from nltk.corpus import wordnet as wn
 
 
 dictionary = enchant.Dict("en_US")
+nltk.download('wordnet')
 
 
 def load_model(filename):
@@ -60,3 +63,26 @@ def nearest_neighbor_gensim(model, word, N):
     # This is the gensim way to do it, but the con is that it only accepts words that are in the vocabulary
     results = model.most_similar(positive=[word], topn=N)
     return [word[0] for word in results]
+
+
+def get_definitions(wordList):
+    """Looks up the defintions of each word in wordList and returns a list of their definitions
+
+    Arguments:
+        wordList [string list] - a list of words
+    Return:
+        definitions [map<string, string>] - a map from words to their definitions
+    """
+    # Note: each synset is a list of words with similiar definitions.
+    # So, right now it adds all of the definitions for all words in the synsets.
+    # Usually, the synsets just contain the same word but different defintions.
+    # Occasionally they have synonyms that are different words.
+    definitions = {}
+    for word in wordList:
+        for synset in wn.synsets(word):
+            cur_word = synset.name().split('.')[0]
+            if cur_word in definitions:
+                definitions[cur_word].add(synset.definition())
+            else:
+                definitions[cur_word] = set([synset.definition()])
+    return definitions
