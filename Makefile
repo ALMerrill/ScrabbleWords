@@ -1,4 +1,4 @@
-NAME	:= amerrill/scrabble-words
+NAME	:= amerrill/scrabble-words-backend
 TAG	:= $$(git log -1 --pretty=%H)
 IMG	:= ${NAME}\:${TAG}
 LATEST	:= ${NAME}\:latest
