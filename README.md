@@ -11,3 +11,5 @@ unzip wiki.en.zip
 rm wiki.en.zip
 ```
 
+Or you can follow the tutorial [here](https://fasttext.cc/docs/en/unsupervised-tutorial.html) to create your own smaller models
+
