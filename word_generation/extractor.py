@@ -22,15 +22,12 @@ def is_all_scrabble_chars(word):
 
 trigram_counts = {}
 with open('en_full.txt') as file:
-    text = file.read()
-i = 1
-lines = text.split('\n')
+    lines = file.readlines()
 for line in lines:
     if len(line.split()) < 2:
         break
-    word = line.split()[0]
-    count = int(line.split()[1])
-    if count < 50 or not is_all_scrabble_chars(word.lower()):
+    word, count = line.split()
+    if int(count) < 50 or not is_all_scrabble_chars(word.lower()):
         continue
     word = '?' + word + '!'
     for i in range(len(word) - 2):

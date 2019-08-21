@@ -16,17 +16,13 @@ initiated = False
 MAX_LENGTH = 7
 
 def init():
-    print('initiating')
     with open ('trigram_counts_full.csv') as file:
-        text = file.read()
-    lines = text.split('\n')
+        lines = file.readlines()
     for line in lines:
         if len(line.split(',')) < 2:
             break
-        trigram = line.split(',')[0]
-        count = int(line.split(',')[1])
-        trigram_counts[trigram] = count
-    print(len(trigram_counts.keys()), ' trigrams')
+        trigram, count = line.split(',')
+        trigram_counts[trigram] = int(count)
     initiated = True
 
 def get_combinations(word, remaining_letters):
@@ -62,7 +58,7 @@ def generate(letters):
             best_score = score
     return best_word
 
-# Use this to test it in a console. It's kinda fun!
+# # Use this to test it in a console. It's kinda fun!
 # while True:
 #     letters = input('What letters do you want to guess? ')
 #     print(generate(letters))
