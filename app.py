@@ -21,6 +21,13 @@ def nearest_neighbor():
     N = request.args.get('N', default=1, type=int)
 
     results = util.nearest_neighbor(model, word, vectors, N)
+    definitions = util.get_definitions(results)
+    print(definitions)
+    with open('word_generation/definitions.txt', 'w+') as f:
+        for key in definitions:
+            for definition in definitions[key]:
+                f.write(definition + '\n')
+
     return jsonify(results)
 
 
