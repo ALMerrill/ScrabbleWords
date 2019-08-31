@@ -1,5 +1,6 @@
 from markovchain import JsonStorage
 from markovchain.text import MarkovText, ReplyMode
+import json
 
 import markovify
 
@@ -16,29 +17,53 @@ def markovchain_example():
     print(markov(max_length=16, reply_to='sentence start',
                  reply_mode=ReplyMode.END) + '\n')
 
-    # markov.save('markov.json')
-
-    # we can actually save the full definition model into a json file to make that part quicker
-    # markov = MarkovText.from_file('markov.json')
-
 
 def markovify_example():
     with open('word_generation/definitions.txt') as f:
         text = f.read()
 
     neighbor_model = markovify.Text(text)
-    # full_definition_model = markovify.Text(all_definitions)
-
-    # You can combine the model with the neighbor defintions with a model with a ton of definitons
-    # and weight it towards the neighbors to get something more like those definitions. (not tested
-    # because I don't have that other text file)
-    # combined_model = markovify.combine([neighbor_model, full_definition_model], [3, 1])
 
     print(neighbor_model.make_sentence() + '\n')
     print(neighbor_model.make_short_sentence(280) + '\n')
-    # print(combined_model.make_sentence())
+
+
+def convert_json_to_txt():
+    with open('word_generation/dictionary.json') as f_in:
+        dict_text = json.load(f_in)
+    with open('word_generation/dictionary.txt', 'w+') as f_out:
+        for word in dict_text:
+            f_out.write(dict_text[word] + '\n')
+
+
+def make_model():
+    with open('word_generation/dictionary_model.json') as f:
+        dictionary_model_json = json.load(f)
+        dictionary_model = markovify.Text.from_json(dictionary_model_json)
+
+    with open('word_generation/definitions.txt') as f:
+        definitions = f.read()
+    neighbor_model = markovify.Text(definitions, well_formed=False)
+
+    # Combined model weighted 1 to 3 towards the neighbor_model to be more like the neighbor definitions
+    combined_model = markovify.combine(
+        [dictionary_model, neighbor_model], [1, 3])
+    for _ in range(5):
+        print(combined_model.make_sentence() + '\n')
+
+
+def create_dictionary_model():
+    with open('word_generation/dictionary.txt') as f:
+        dictionary = f.read()
+
+    dictionary_model = markovify.Text(dictionary)
+
+    dictionary_model_json = dictionary_model.to_json()
+    with open('word_generation/dictionary_model.json', 'w', encoding='utf-8') as f:
+        json.dump(dictionary_model_json, f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
-    markovchain_example()
-    markovify_example()
+    make_model()
+    # markovchain_example()
+    # markovify_example()
