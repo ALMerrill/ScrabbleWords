@@ -28,14 +28,6 @@ def markovify_example():
     print(neighbor_model.make_short_sentence(280) + '\n')
 
 
-def convert_json_to_txt():
-    with open('word_generation/dictionary.json') as f_in:
-        dict_text = json.load(f_in)
-    with open('word_generation/dictionary.txt', 'w+') as f_out:
-        for word in dict_text:
-            f_out.write(dict_text[word] + '\n')
-
-
 def make_model():
     with open('word_generation/dictionary_model.json') as f:
         dictionary_model_json = json.load(f)
@@ -50,6 +42,14 @@ def make_model():
         [dictionary_model, neighbor_model], [1, 3])
     for _ in range(5):
         print(combined_model.make_sentence() + '\n')
+
+
+def convert_json_to_txt():
+    with open('word_generation/dictionary.json') as f_in:
+        dict_text = json.load(f_in)
+    with open('word_generation/dictionary.txt', 'w+') as f_out:
+        for word in dict_text:
+            f_out.write(dict_text[word] + '\n')
 
 
 def create_dictionary_model():
