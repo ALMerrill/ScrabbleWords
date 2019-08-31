@@ -22,7 +22,6 @@ def nearest_neighbor():
 
     results = util.nearest_neighbor(model, word, vectors, N)
     definitions = util.get_definitions(results)
-    print(definitions)
     with open('word_generation/definitions.txt', 'w+') as f:
         for key in definitions:
             for definition in definitions[key]:
