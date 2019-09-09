@@ -65,5 +65,3 @@ def create_dictionary_model():
 
 if __name__ == "__main__":
     make_model()
-    # markovchain_example()
-    # markovify_example()
