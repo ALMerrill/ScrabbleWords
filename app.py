@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
 import os
 import socket
-from util import util
+from nearestNeighbor import nearestNeighbor
 
 app = Flask(__name__)
 
-model, vectors = util.load_model('fil9.vec')
+model, vectors = nearestNeighbor.load_model('fil9.vec')
 
 
 @app.route('/')
@@ -20,8 +20,8 @@ def nearest_neighbor():
         return 'No word was given'
     N = request.args.get('N', default=1, type=int)
 
-    results = util.nearest_neighbor(model, word, vectors, N)
-    definitions = util.get_definitions(results)
+    results = nearestNeighbor.nearest_neighbor(model, word, vectors, N)
+    definitions = nearestNeighbor.get_definitions(results)
     with open('word_generation/definitions.txt', 'w+') as f:
         for key in definitions:
             for definition in definitions[key]:
