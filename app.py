@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 import os
 import socket
 from nearestNeighbor import nearestNeighbor
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 
 model, vectors = nearestNeighbor.load_model('fil9.vec')
 
@@ -14,6 +16,7 @@ def root():
 
 
 @app.route('/api/nearest-neighbor')
+@cross_origin()
 def nearest_neighbor():
     word = request.args.get('word', default='', type=str)
     if word == '':
@@ -31,5 +34,5 @@ def nearest_neighbor():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4000)  # TODO: Grab port from .env file
+    app.run(host='localhost', port=4000)  # TODO: Grab port from .env file
     print(os.getenv('API_HOST'))
