@@ -1,12 +1,10 @@
 import fasttext
 import fasttext.util
 import gensim
-import enchant
 import nltk
 from nltk.corpus import wordnet as wn
+import word_getter
 
-
-dictionary = enchant.Dict("en_US")
 nltk.download('wordnet')
 
 
@@ -51,8 +49,8 @@ def nearest_neighbor(model, word, vectors, N):
             word_vec, vectors, ban_set)
         neighbor_word = model.words[nearest_vec_index]
         print(neighbor_word)
-        print(dictionary.check(neighbor_word))
-        isWord = dictionary.check(neighbor_word)
+        print(word_getter.check(neighbor_word))
+        isWord = word_getter.check(neighbor_word)
         if isWord:
             results.append(neighbor_word)
         ban_set.append(nearest_vec_index)
