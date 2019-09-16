@@ -1,7 +1,6 @@
 import difflib
-import enchant
+import word_getter
 
-dictionary = enchant.Dict("en_US")
 all_words = []
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
@@ -12,14 +11,8 @@ def is_all_scrabble_chars(word):
     return True
 
 def init():
-    with open('../word_generation/en_full.txt') as word_file:
-        lines = word_file.readlines()
-    for line in lines:
-        if len(line.split()) < 2:
-            break
-        word, count = line.split()
-        if is_all_scrabble_chars(word.lower()) and dictionary.check(word):
-            all_words.append(word)
+    global all_words
+    all_words = word_getter.get_all_words()
 
 
 def get_nearest_neighbors(word):
