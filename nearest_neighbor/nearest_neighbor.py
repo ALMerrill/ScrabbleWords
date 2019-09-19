@@ -3,7 +3,8 @@ import fasttext.util
 import gensim
 import nltk
 from nltk.corpus import wordnet as wn
-import word_getter
+from . import word_getter
+from . import edit_distance
 
 nltk.download('wordnet')
 
@@ -31,7 +32,7 @@ def load_gensim_model(filename):
         'models/' + filename)
 
 
-def nearest_neighbor(model, word, vectors, N):
+def nearest_neighbors(model, word, vectors):
     """ Given a word, return the N nearest neighbors
     Arguments:
         model [fasttext model] - loaded from a .bin file
@@ -44,7 +45,9 @@ def nearest_neighbor(model, word, vectors, N):
     word_vec = model[word]
     ban_set = []
     results = []
-    while len(results) < N:
+    num_tries = 3
+    N = 50
+    for _ in range(num_tries):
         nearest_vec_index = fasttext.util.find_nearest_neighbor(
             word_vec, vectors, ban_set)
         neighbor_word = model.words[nearest_vec_index]
@@ -54,6 +57,14 @@ def nearest_neighbor(model, word, vectors, N):
         if isWord:
             results.append(neighbor_word)
         ban_set.append(nearest_vec_index)
+    remaining = N - len(results)
+    if remaining > 0:
+        i = 0
+        while len(results) < N:
+            results.extend(
+                edit_distance.get_nearest_neighbors(word, remaining + i))
+            i += 1
+            results = list(set(results))
     return results
 
 
@@ -84,3 +95,8 @@ def get_definitions(wordList):
             else:
                 definitions[cur_word] = set([synset.definition()])
     return definitions
+
+
+# model, vectors = load_model('fil9.vec')
+# while True:
+#     print(nearest_neighbors(model, input('Enter a word: '), vectors))
