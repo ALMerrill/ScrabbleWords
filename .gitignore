@@ -1,1 +1,2 @@
-word_generation/definitions.txt
+__pycache__
+*.pyc
