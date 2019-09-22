@@ -86,14 +86,10 @@ def get_definitions(wordList):
     # So, right now it adds all of the definitions for all words in the synsets.
     # Usually, the synsets just contain the same word but different defintions.
     # Occasionally they have synonyms that are different words.
-    definitions = {}
+    definitions = ""
     for word in wordList:
         for synset in wn.synsets(word):
-            cur_word = synset.name().split('.')[0]
-            if cur_word in definitions:
-                definitions[cur_word].add(synset.definition())
-            else:
-                definitions[cur_word] = set([synset.definition()])
+            definition += "%s\n" % synset.definition()
     return definitions
 
 
