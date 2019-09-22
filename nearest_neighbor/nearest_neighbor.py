@@ -89,7 +89,7 @@ def get_definitions(wordList):
     definitions = ""
     for word in wordList:
         for synset in wn.synsets(word):
-            definition += "%s\n" % synset.definition()
+            definitions += "%s\n" % synset.definition()
     return definitions
 
 

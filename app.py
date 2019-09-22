@@ -20,7 +20,6 @@ def root():
 @app.route('/api/definition')
 @cross_origin()
 def definition():
-    breakpoint()
     letters = request.args.get('letters', default='', type=str)
     if letters == '':
         return 'No letters were given'
@@ -28,14 +27,12 @@ def definition():
     best_word = generator.generate(letters)
     results = nearest_neighbor.nearest_neighbors(model, best_word, vectors)
     definitions = nearest_neighbor.get_definitions(results)
-    # with open('word_generation/definitions.txt', 'w+') as f:
-    #     for key in definitions:
-    #         for definition in definitions[key]:
-    #             f.write(definition + '\n')
     combined_markov_model = markov.get_combined_model(
         dictionary_markov_model, definitions)
-    definition = combined_markov_model.make_sentence()
-    return jsonify({'word': best_word, "definition": definition})
+    return jsonify({
+        'word': best_word,
+        "definition": combined_markov_model.make_sentence()
+    })
 
 
 if __name__ == '__main__':
