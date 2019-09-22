@@ -15,8 +15,9 @@ trigram_counts = {}
 initiated = False
 MAX_LENGTH = 7
 
+
 def init():
-    with open ('trigram_counts_full.csv') as file:
+    with open('word_generation/trigram_counts_full.csv') as file:
         lines = file.readlines()
     for line in lines:
         if len(line.split(',')) < 2:
@@ -24,6 +25,7 @@ def init():
         trigram, count = line.split(',')
         trigram_counts[trigram] = int(count)
     initiated = True
+
 
 def get_combinations(word, remaining_letters):
     if len(word) >= MAX_LENGTH:
@@ -34,8 +36,10 @@ def get_combinations(word, remaining_letters):
     if len(word) >= 3:
         combinations = [word]
     for i in range(len(remaining_letters)):
-        combinations += get_combinations(word + remaining_letters[i], remaining_letters[:i] + remaining_letters[i+1:])
+        combinations += get_combinations(
+            word + remaining_letters[i], remaining_letters[:i] + remaining_letters[i+1:])
     return combinations
+
 
 def generate(letters):
     if len(letters) > MAX_LENGTH:

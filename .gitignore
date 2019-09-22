@@ -1,1 +1,4 @@
-word_generation/definitions.txt
+*
+!.gitignore
+__pycache__
+*.pyc
