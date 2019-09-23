@@ -10,6 +10,8 @@ the trigram frequencies
 -If a combination actually appears in the dictionary, return that one instead of
 making one up.
 '''
+from random import shuffle
+import random
 
 trigram_counts = {}
 initiated = False
@@ -38,6 +40,7 @@ def get_combinations(word, remaining_letters):
     for i in range(len(remaining_letters)):
         combinations += get_combinations(
             word + remaining_letters[i], remaining_letters[:i] + remaining_letters[i+1:])
+    shuffle(combinations)
     return combinations
 
 
@@ -57,6 +60,7 @@ def generate(letters):
             trigram = formalized_word[i:i+3]
             if trigram in trigram_counts:
                 score += trigram_counts[trigram]
+        score = score * (1 + random.uniform(0, 1))
         if score > best_score:
             best_word = combination
             best_score = score
