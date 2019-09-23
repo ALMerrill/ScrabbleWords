@@ -28,20 +28,18 @@ def markovify_example():
     print(neighbor_model.make_short_sentence(280) + '\n')
 
 
-def make_model():
+def get_dictionary_model():
     with open('word_generation/dictionary_model.json') as f:
         dictionary_model_json = json.load(f)
-        dictionary_model = markovify.Text.from_json(dictionary_model_json)
+        return markovify.Text.from_json(dictionary_model_json)
 
-    with open('word_generation/definitions.txt') as f:
-        definitions = f.read()
+
+def get_combined_model(dictionary_model, definitions):
     neighbor_model = markovify.Text(definitions, well_formed=False)
 
     # Combined model weighted 1 to 3 towards the neighbor_model to be more like the neighbor definitions
-    combined_model = markovify.combine(
+    return markovify.combine(
         [dictionary_model, neighbor_model], [1, 3])
-    for _ in range(5):
-        print(combined_model.make_sentence() + '\n')
 
 
 def convert_json_to_txt():
