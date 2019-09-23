@@ -31,7 +31,7 @@ def definition():
         dictionary_markov_model, definitions)
     return jsonify({
         'word': best_word,
-        "definition": combined_markov_model.make_sentence()
+        'definition': combined_markov_model.make_sentence()
     })
 
 
